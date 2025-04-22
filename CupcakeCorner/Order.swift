@@ -21,6 +21,7 @@ class Order: Codable {
         case _zip = "zip"
     }
     
+    private static let savedOrderKey = "savedOrder"
     static let types = ["Vanilla","Strawberry", "Chocolate", "Rainbow"]
     
     var type = 0
@@ -47,6 +48,11 @@ class Order: Codable {
             return false
         }
         
+        // Challenge 1: Improve the validation to make sure a string of pure white space is invalid
+        if name.trimmingCharacters(in: .whitespaces).isEmpty || streetAddress.trimmingCharacters(in: .whitespaces).isEmpty || zip.trimmingCharacters(in: .whitespaces).isEmpty {
+            return false
+        }
+        
         return true
     }
     
@@ -68,5 +74,22 @@ class Order: Codable {
         }
         
         return cost
+    }
+    
+    // Challenge 3: Save the user address to user defaults
+    // did not work
+    func save() {
+        if let encoded = try? JSONEncoder().encode(self) {
+            UserDefaults.standard.set(encoded, forKey: Order.savedOrderKey)
+        }
+    }
+    
+    static func load() -> Order {
+        if let data = UserDefaults.standard.data(forKey: Order.savedOrderKey) {
+            let decoded = try? JSONDecoder().decode(Order.self, from: data)
+            return decoded!
+        } else {
+            return Order()
+        }
     }
 }

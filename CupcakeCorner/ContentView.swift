@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var order = Order()
+    @State private var order = Order.load()
     
     var body: some View {
         NavigationStack {

@@ -13,6 +13,9 @@ struct CheckoutView: View {
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
     
+    @State private var errorMessage = ""
+    @State private var showingError = false
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -44,6 +47,11 @@ struct CheckoutView: View {
         } message: {
             Text(confirmationMessage)
         }
+        .alert("Error", isPresented: $showingError) {
+            Button("OK") {}
+        } message: {
+            Text(errorMessage)
+        }
     }
     
     func placeOrder() async {
@@ -66,7 +74,9 @@ struct CheckoutView: View {
             confirmationMessage = "Your order for \(decodedOrder.quantity) x \(Order.types[decodedOrder.type].lowercased()) cupcakes has been placed. Thank you! "
             showingConfirmation = true
         } catch {
-            print("Check out failed: \(error.localizedDescription)")
+            // Challenge 2:show an informative error message
+            errorMessage = "Sorry, we could not place your order. There is not internet connection. \n \n \(error.localizedDescription)"
+            showingError = true
         }
     }
 }
