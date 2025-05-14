@@ -27,6 +27,8 @@ struct CheckoutView: View {
                     ProgressView()
                 }
                 .frame(height: 233)
+                // Challenge 1: The check out view in Cupcake Corner uses an image and loading spinner that don’t add anything to the UI, so find a way to make the screenreader not read them out
+                .accessibilityHidden(true)
                 
                 Text("Your total cost is \(order.cost, format: .currency(code: "EUR"))")
                     .font(.title)
